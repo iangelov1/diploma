@@ -1,15 +1,10 @@
 
-import React, { useEffect, useState } from "react";
-import Grid from '@material-ui/core/Grid';
-import { Paper } from '@material-ui/core';
+import React, { useState } from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import { BrowserRouter as Router, Link, Route, Switch, Redirect, useLocation, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import clsx from 'clsx';
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import List from "@material-ui/core/List";
 import { Collapse } from '@material-ui/core';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
@@ -46,7 +41,8 @@ const useStyles = makeStyles((theme) => ({
 
     }
 }));
-function MenuList({ path, name, withAuth, component, index, innerMenu }) {
+
+const MenuList = ({ path, name, withAuth, component, index, innerMenu }) => {
     const classes = useStyles();
     const [expand, setExpand] = useState(false);
 
@@ -70,8 +66,6 @@ function MenuList({ path, name, withAuth, component, index, innerMenu }) {
                     <ListItem button key={path} className={innerMenu ? classes.exp : null}>
                         {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
                         <ListItemText primary={name} />
-
-
                     </ListItem>
                 </Link>
             }
@@ -82,7 +76,6 @@ function MenuList({ path, name, withAuth, component, index, innerMenu }) {
                         {innerMenu.map(item => (
                             <Link key={item.path} style={{ textDecoration: 'none', 'color': 'black' }} to={{ pathname: item.path }} >
                                 <ListItem button key={item.path} className={clsx(classes.innerMenu)}>
-
                                     <ListItemText primary={item.name} />
                                 </ListItem>
                             </Link>

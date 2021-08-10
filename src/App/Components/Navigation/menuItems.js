@@ -1,9 +1,18 @@
-
 export default [
-    { path: "/", name: "Начало", withAuth: false },
-    { path: "/books", name: "Всички книги", withAuth: false },
-    {
-        path: "/category", name: "Категории", withAuth: false,
+    { 
+        path: "/", 
+        name: "Начало", 
+        withAuth: false 
+    },
+    { 
+        path: "/books", 
+        name: "Всички книги", 
+        withAuth: false 
+    },
+    { 
+        path: "/category", 
+        name: "Категории", 
+        withAuth: false,
         innerMenu: [
             { path: "/category/Българска и световна литература", name: "Българска и световна литература", withAuth: false },
             { path: "/category/Българска филология и начална педагогика", name: "Българска филология и начална педагогика", withAuth: false },

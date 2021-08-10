@@ -86,6 +86,7 @@ const genresList = [
     'Анатомия и биология',
     'Университетски Записки'
 ];
+
 const languagesList = [
     {
         code: 'BG',
@@ -108,8 +109,6 @@ const languagesList = [
         title: 'Френски'
     },
 ];
-
-
 
 function getStyles(name, personName, theme) {
     return {
@@ -140,10 +139,8 @@ function BooksBase() {
     const [location, setLocation] = useState('')
     const inputFileRef = useRef(null);
     const [data, setData] = useState([])
-    const [uploadErrors, setUploadErrors] = useState([])
     const batch = firestore.batch()
     
-
     const getXlsxDocument = evt => {
         var files = evt.target.files; // FileList object
 
