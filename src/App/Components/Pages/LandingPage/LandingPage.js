@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { firestore } from '../../Firebase/firebase'
-import BookCard from '../Books/BookCard'
-import { BrowserRouter as Router, Link, Route, Switch, Redirect, useLocation } from 'react-router-dom';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
+import { Link, Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 
-import Container from '@material-ui/core/Container';
-import G0 from '../../../../images/HomeBG.svg'
-import InfoGraphic from '../../../../images/InfoGraphics.svg'
+import { Grid, TextField, Container, Button, Typography, MobileStepper } from '@material-ui/core';
+
 import SwipeableViews from "react-swipeable-views";
-import MobileStepper from "@material-ui/core/MobileStepper";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
-import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
-import GoogleMapReact from 'google-map-react';
+import { KeyboardArrowLeft, KeyboardArrowRight } from "@material-ui/icons";
+
+// components
+import BookCard from '../Books/BookCard'
+import { firestore } from '../../Firebase/firebase'
+
+// images
+import G0 from '../../../../images/HomeBG.svg'
+
 const AutoPlaySwipeableViews = SwipeableViews;
+
 const useStyles = makeStyles((theme) => ({
     cards: {
         maxWidth: '1200px',
@@ -66,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
 
     }
 }));
-const AnyReactComponent = ({ text }) => <img src='/hub-logo.png'/>;
+
 function LandingPage() {
     const [searchWord, setSearchWord] = useState('')
     const [searchNow, setSearchNow] = useState(false)
@@ -76,16 +74,17 @@ function LandingPage() {
     const [activeStep, setActiveStep] = React.useState(0);
     const [maxSteps, setMaxSteps] = useState(3);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const data = await firestore.collection("books").limit(12).get().then(
-                res => {
-                    setBooks(res.docs.map(doc => ({ ...doc.data(), id: doc.id })));
-                }
-            );
-            // setBooks(data.docs.map(doc => ({ ...doc.data(), id: doc.id })));
-        }
+    const fetchData = async () => {
+        const data = await firestore.collection("books").limit(12).get().then(
+            res => {
+                setBooks(res.docs.map(doc => ({ ...doc.data(), id: doc.id })));
+            }
+        );
 
+        console.log(data)
+    }
+
+    useEffect(() => {
         fetchData()
     }, [])
 
@@ -97,8 +96,6 @@ function LandingPage() {
         newArr.push(first, second, third)
         setBooksForCarousell(newArr)
     }, [books])
-
-
 
     const handleChange = (e) => {
         if (e.keyCode === 13) {
@@ -116,23 +113,16 @@ function LandingPage() {
     const handleStepChange = (step) => {
         setActiveStep(step);
     };
+
     return (
         <>
             <div id="head-section">
                 <img id="head-section-image" src={G0} />
+
                 <Container id="head-section-content" component="main" >
-
                     <Typography component="h2" className='header'>Study Hub Library</Typography>
-                    {searchNow
-                        ?
-                        <Redirect
-                            to={{
-                                pathname: "/books",
-                                searchWord: searchWord
-
-                            }} />
-                        : null
-                    }
+                    
+                    { searchNow ? <Redirect to={{ pathname: "/books", searchWord: searchWord }} /> : null }
 
                     <TextField
                         className={classes.searchBar}
@@ -141,29 +131,18 @@ function LandingPage() {
                         value={searchWord}
                         type="search"
                         onChange={(e) => setSearchWord(e.target.value)}
-                        onKeyDown={(e) => handleChange(e)} />
+                        onKeyDown={(e) => handleChange(e)} 
+                    />
                 </Container>
             </div>
+
             <div id="blue-section">
                 <Container component="main" style={{position:'relative'}}>
+                    <Typography variant="h5" component="h5" style={{marginBottom: '20px', color: 'white'}}> Най-нови книги </Typography>
 
-                    <Typography variant="h5" component="h5"
-                        style={{marginBottom: '20px', color: 'white'}}
-
-                    >Най-нови книги</Typography>
-                    <AutoPlaySwipeableViews
-                        axis={"x"}
-                        index={activeStep}
-                        onChangeIndex={handleStepChange}
-                        enableMouseEvents
-                        id='carosell'
-                    >
+                    <AutoPlaySwipeableViews axis={"x"} index={activeStep} onChangeIndex={handleStepChange} enableMouseEvents id='carosell'>
                         {booksForCarousell.map((step, index) => (
-                            <Grid container
-                                direction="row"
-                                justify="center"
-                                spacing={5}
-                                className={classes.cards} key={index}>
+                            <Grid container direction="row" justify="center" spacing={5} className={classes.cards} key={index}>
                                 {Math.abs(activeStep - index) <= 2
                                     ? step.map((i) => (
                                         <Grid key={i.id} item sm={4} md={3} xs={12} >
@@ -576,50 +555,6 @@ function LandingPage() {
 
 
                     </Grid>
-
-                </Container>
-            </div>
-            <div id='contacts'>
-                <Container component="main" >
-
-                    <Typography variant="h5" component="h5" style={{marginBottom: '20px'}}>Контакти</Typography>
-                    <Grid container
-                        direction="row"
-                        justify="center"
-                        spacing={2}
-                        className={classes.cards}>
-                        <Grid item lg={6} md={6} sm={12} xs={12} className='contact-box' >
-                                <p style={{fontSize: '18px', fontWeight: '500', lineHeight: '22px', display: 'flex', alignSelf:'center'}}>
-                                <svg style={{marginRight: '10px', width:"21px"}} width="32" height="26" viewBox="0 0 32 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M27.3077 2H4.69231C3.20539 2 2 3.20539 2 4.69231V20.8462C2 22.3331 3.20539 23.5385 4.69231 23.5385H27.3077C28.7946 23.5385 30 22.3331 30 20.8462V4.69231C30 3.20539 28.7946 2 27.3077 2Z" stroke="#193F4C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M6.30774 6.30762L16 13.8461L25.6924 6.30762" stroke="#193F4C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                    studyhub.bulgaria@gmail.com</p>
-                                <p style={{fontSize: '18px', fontWeight: '500', lineHeight: '22px', display: 'flex', alignSelf:'center'}}>
-                                <svg style={{marginRight: '10px', width:"21px"}} width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M29.126 23.9406C28.0572 22.8637 25.4685 21.2921 24.2125 20.6588C22.5768 19.835 22.4422 19.7677 21.1566 20.7227C20.2991 21.3601 19.729 21.9295 18.7254 21.7155C17.7218 21.5015 15.541 20.2947 13.6314 18.3913C11.7219 16.4879 10.445 14.244 10.2303 13.2438C10.0156 12.2437 10.5944 11.6803 11.2258 10.8209C12.1156 9.60937 12.0483 9.40745 11.2877 7.77195C10.6947 6.49988 9.07729 3.93557 7.9963 2.87216C6.83993 1.72999 6.83993 1.93191 6.09481 2.24151C5.4882 2.49672 4.90624 2.80695 4.35621 3.1683C3.27926 3.88375 2.68156 4.47805 2.26356 5.37118C1.84557 6.26432 1.65778 8.35817 3.81639 12.2793C5.975 16.2005 7.48946 18.2055 10.6241 21.3312C13.7587 24.4568 16.169 26.1374 19.6926 28.1135C24.0516 30.5546 25.7236 30.0788 26.6194 29.6615C27.5153 29.2442 28.1124 28.6519 28.8292 27.575C29.1915 27.026 29.5025 26.4447 29.7581 25.8386C30.0684 25.0962 30.2703 25.0962 29.126 23.9406Z" stroke="#193F4C" stroke-width="3" stroke-miterlimit="10"/>
-                                </svg>
-                                    +359 884 901 121</p>
-                        </Grid>
-                        <Grid item lg={6} md={6} sm={12} xs={12} >
-                            <div style={{ height: '300px', width: '100%' }}>
-                                <GoogleMapReact
-                                bootstrapURLKeys={{ key: 'AIzaSyChRnCkVLvvNrExIhYpPavcZtTVgVrb3iI' }}
-                                defaultCenter={{lat: 42.656371,
-                                    lng: 23.345478}}
-                                defaultZoom={16}
-                                >
-                                <AnyReactComponent
-                                    lat={42.656371}
-                                    lng={23.345478}
-                                    text="My Marker"
-                                />
-                                </GoogleMapReact>
-                            </div>
-                        </Grid>
-                    </Grid>
-                
-                    
 
                 </Container>
             </div>
