@@ -1,7 +1,7 @@
-import React, { Component, useState, useEffect, useRef } from 'react';
-import { UserContext } from '../../../Context/userContext'
+import React, { useState, useRef } from 'react';
+
 import withAuthorization from '../../../Session/withAuthorization';
-import { Switch, Route, Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { withFirebase } from '../../Firebase/context';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -19,7 +19,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Typography from '@material-ui/core/Typography';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import XLSX from "xlsx"
+import XLSX from "xlsx";
 
 const useStyles = makeStyles((theme) => ({
     prev: {
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     uploadField: {
-        display: 'none'
+        display: 'none !important'
     },
     formControl: {
         margin: theme.spacing(0),
@@ -70,7 +70,8 @@ const SheetJSFT = [
     "wq*",
     "html",
     "htm"
-]
+];
+
 const genresList = [
     'Българска и световна литература',
     'Българска филология и начална педагогика',
@@ -118,14 +119,14 @@ function getStyles(name, personName, theme) {
                 : theme.typography.fontWeightMedium
     };
 }
+
 function AddBook() {
     return (
         <Books />
     );
 }
 
-
-function BooksBase() {
+const BooksBase = () => {
     const classes = useStyles();
     const theme = useTheme();
     const [title, setTitle] = useState('')
@@ -142,25 +143,23 @@ function BooksBase() {
     const batch = firestore.batch()
     
     const getXlsxDocument = evt => {
-        var files = evt.target.files; // FileList object
-
-        // use the 1st file from the list
+        var files = evt.target.files;
         var file = files[0];
 
         const reader = new FileReader();
         const rABS = !!reader.readAsBinaryString;
-        var err = false
+
+        var err = false;
+
         reader.onload = e => {
-            /* Parse data */
             const bstr = e.target.result;
             const wb = XLSX.read(bstr, { type: rABS ? "binary" : "array" });
-            /* Get first worksheet */
+
             const wsname = wb.SheetNames[0];
             const ws = wb.Sheets[wsname];
-            /* Convert array of arrays */
             const booksData = XLSX.utils.sheet_to_json(ws, { header: 1 });
-            /* Update state */
-            var newArr = []
+            var newArr = [];
+
             booksData.map(item => {
                 const genres1 = item[2].split(', ');
                 const languages1 = item[5].split(', ');
@@ -181,11 +180,10 @@ function BooksBase() {
             setData(newArr)
         }
 
-
         if (rABS) reader.readAsBinaryString(file);
         else reader.readAsArrayBuffer(file);
-
     };
+
     const bulkUpload = () => {
         data.map((doc) => {
             batch.set(firestore.collection('books').doc(), doc)
@@ -197,7 +195,6 @@ function BooksBase() {
             ))
         })
     }
-
 
     const HandleSubmit = (e, title, author, description, language, genre, image, bookedDates) => {
         e.preventDefault();
@@ -300,19 +297,21 @@ function BooksBase() {
     const handleChangeGenre = event => {
         setGenre(event.target.value);
     };
+
     const handleChangeLanguage = event => {
         setLanguage(event.target.value);
     };
+
     const HandleUpload = (e) => {
         e.preventDefault();
         document.getElementById("image-file").click()
-
     }
+
     const HandlePrev = (evt) => {
         document.getElementById("preview").innerHTML = "";
 
+        setImage(evt.target.files[0]);
 
-        setImage(evt.target.files[0])
         if (evt.target.files[0].type === "image/jpeg" || evt.target.files[0].type === "image/png") {
             var image = document.createElement('img');
 
@@ -322,75 +321,37 @@ function BooksBase() {
 
         setImage(evt.target.files[0])
     }
+
     const isInvalid = title === '' || language === '' || author === '' || genre.length === 0;
+
     return (
         <Container component="main" >
-            <ToastContainer
-                position="top-center"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover />
-            <Typography variant="h1" component="h1">Добави Книга</Typography>
+            <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
 
-            <Grid
-                container
-                direction="row"
-                justify="center"
-                alignItems="center"
-            >
+            <Typography variant="h1" component="h1"> Добави Книга </Typography>
+
+            <Grid container direction="row" justify="center" alignItems="center">
                 <Grid item xs={12}>
                     <form className="forms" onSubmit={(e) => HandleSubmit(e, title, author, description, language, genre, image, bookedDates)}>
-                        <Grid
-                            container
-                            direction="row"
-                            justify="center"
-                            spacing={5}
-
-                        >
+                        <Grid container direction="row" justify="center" spacing={5}>
                             <Grid item xs={3}>
                                 <div id="preview" className={classes.prev}></div>
                                 <Button onClick={(e) => HandleUpload(e)} variant="outlined" color="primary">Добави корица</Button>
-                                <input id="image-file" type="file" onChange={HandlePrev} className={classes.uploadField} />
+                                <input id="image-file" type="file" onChange={HandlePrev} style={{ display: 'none' }} />
                             </Grid>
+
                             <Grid item xs={9}>
-                                <TextField
-                                    name="title"
-                                    value={title}
-                                    onChange={(e) => setTitle(e.target.value)}
-                                    label="Заглавие"
-                                    fullWidth={true}
-                                />
-                                <TextField
-                                    name="author"
-                                    value={author}
-                                    onChange={(e) => setAuthor(e.target.value)}
-                                    label="Автор"
-                                    fullWidth={true}
-                                />
-                                <TextField
-                                    name="description"
-                                    value={description}
-                                    multiline={true}
-                                    onChange={(e) => setDescription(e.target.value)}
-                                    label="Описание"
-                                    fullWidth
-                                />
-                                <Grid
-                                    container
-                                    direction="row"
-                                    justify="center"
-                                    spacing={2}
+                                <TextField name="title" value={title} onChange={(e) => setTitle(e.target.value)} label="Заглавие" fullWidth={true} style={{ marginBottom: '10px' }} />
+                                
+                                <TextField name="author" value={author} onChange={(e) => setAuthor(e.target.value)} label="Автор" fullWidth={true} style={{ marginBottom: '10px' }} />
+                                
+                                <TextField name="description" value={description} multiline={true} onChange={(e) => setDescription(e.target.value)} label="Описание" fullWidth style={{ marginBottom: '10px' }} />
 
-                                >
+                                <Grid container direction="row" justify="center" spacing={2}>
                                     <Grid item xs={6}>
-
                                         <FormControl className={classes.formControl}>
-                                            <InputLabel id="demo-mutiple-chip-label">Жанрове</InputLabel>
+                                            <InputLabel id="demo-mutiple-chip-label"> Жанрове </InputLabel>
+
                                             <Select
                                                 labelId="demo-mutiple-chip-label"
                                                 id="demo-mutiple-chip"
@@ -405,6 +366,7 @@ function BooksBase() {
                                                         ))}
                                                     </div>
                                                 )}
+
                                                 MenuProps={{
                                                     PaperProps: {
                                                         style: {
@@ -429,9 +391,7 @@ function BooksBase() {
                                     </Grid>
 
                                     <Grid item xs={3}>
-
                                         <FormControl className={classes.formControl}>
-
                                             <InputLabel id="demo-simple-select-helper-label">Език</InputLabel>
 
                                             <Select
@@ -459,47 +419,28 @@ function BooksBase() {
                                                 }}
                                             >
                                                 {languagesList.map(name => (
-                                                    <MenuItem
-                                                        key={name}
-                                                        value={name.code}
-                                                        style={getStyles(name, genre, theme)}
-                                                    >
+                                                    <MenuItem key={name} value={name.code} style={getStyles(name, genre, theme)}>
                                                         {name.title}
                                                     </MenuItem>
                                                 ))}
                                             </Select>
                                         </FormControl>
                                     </Grid>
+
                                     <Grid item xs={3}>
-
-
-                                        <TextField
-                                            name="copies"
-                                            value={copies}
-                                            multiline={true}
-                                            onChange={(e) => setCopies(e.target.value)}
-                                            label="Екземпляри"
-                                            fullWidth
-                                        />
+                                        <TextField name="copies" value={copies} multiline={true} onChange={(e) => setCopies(e.target.value)} label="Екземпляри" fullWidth />
                                     </Grid>
-
                                 </Grid>
+
                                 <Grid item xs={3}>
-                                    <TextField
-                                        name="location"
-                                        value={location}
-                                        multiline={true}
-                                        onChange={(e) => setLocation(e.target.value)}
-                                        label="Рафт"
-                                        fullWidth
-                                    />
+                                    <TextField name="location" value={location} multiline={true} onChange={(e) => setLocation(e.target.value)} label="Рафт" fullWidth />
                                 </Grid>
-
                             </Grid>
-                            <Button disabled={isInvalid} type="submit" variant="contained" color="primary">Добави книга</Button>
+
+                            <Button disabled={isInvalid} type="submit" variant="contained" color="primary"> Добави книга </Button>
                         </Grid>
                     </form>
-                    <input
+                    {/* <input
                         type="file"
                         className="form-control"
                         id="file"
@@ -508,14 +449,12 @@ function BooksBase() {
                         accept={SheetJSFT}
                         onChange={getXlsxDocument}
                     />
-                    <Button disabled={data.length === 0} type="submit" onClick={() => bulkUpload()} variant="contained" color="primary">Качи</Button>
-
+                    <Button disabled={data.length === 0} type="submit" onClick={() => bulkUpload()} variant="contained" color="primary">Качи</Button> */}
                 </Grid>
             </Grid>
         </Container >
     );
 }
-
 
 const condition = authUser => authUser.role === "admin";
 

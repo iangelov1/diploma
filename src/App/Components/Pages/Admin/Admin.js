@@ -126,9 +126,6 @@ function Admin() {
   }, [books])
 
   useEffect(() => {
-  }, [booksToBeTaken])
-
-  useEffect(() => {
     let filteredArray = books
       .filter(element =>
         element.status === "toBeTaken"
@@ -144,6 +141,7 @@ function Admin() {
         card.user.username.toLowerCase().includes(searchTake.toLowerCase()) || card.book.title.toLowerCase().includes(searchTake.toLowerCase())))
     }
   }, [searchTake])
+
   useEffect(() => {
     let filteredArray = books
       .filter(element =>
@@ -208,7 +206,6 @@ function Admin() {
       <>Успешно променихте статуса на { operation.book.title} на ВЗЕТА!</>
     )));
   }
-
 
   const ChangeStatusToReturned = async (operation) => {
     const data = await firestore.collection('users').doc(operation.user.uid).get()
