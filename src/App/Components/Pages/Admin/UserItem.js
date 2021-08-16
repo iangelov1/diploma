@@ -1,6 +1,6 @@
 
-import React, { useEffect, useContext, useState, useRef } from "react";
-import { BrowserRouter as Router, Link, useHistory } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { Link, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { firestore } from '../../Firebase/firebase'
 import withAuthorization from '../../../Session/withAuthorization'
@@ -44,13 +44,7 @@ function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
     return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
+        <div role="tabpanel" hidden={value !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`} {...other}>
             {value === index && (
                 <Box p={3}>
                     {children}
