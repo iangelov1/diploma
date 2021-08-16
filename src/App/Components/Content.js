@@ -1,11 +1,9 @@
 
-import React, { Component, Suspense, useState, useContext, useEffect } from "react";
+import React, { Suspense, useState, useContext, useEffect } from "react";
 
-import { BrowserRouter as Router, Link, Route, Switch, Redirect, useLocation } from 'react-router-dom';
-
+import { Link, Route, Switch } from 'react-router-dom';
 
 import routes from "../routes/routes";
-// import Login from "./Container/Common/Login";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import clsx from "clsx";
@@ -13,23 +11,16 @@ import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import { makeStyles, useTheme, formatMs } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import MenuIcon from '@material-ui/icons/Menu';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+
 import sideMenu from './Navigation/menuItems'
 import CloseIcon from '@material-ui/icons/Close';
 import { UserContext } from "../Context/userContext";
-import Unauthorized from './Pages/Unauthorized/Unauthorized'
 import VerifiedUserOutlinedIcon from '@material-ui/icons/VerifiedUserOutlined';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
-import Button from '@material-ui/core/Button';
 import MenuList from './Navigation/MenuList';
-import Logo from '../../images/Logo.png'
-import Typography from '@material-ui/core/Typography';
+import Logo from '../../images/logo.jpg'
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const drawerWidth = 240;
@@ -119,8 +110,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-
-function Content() {
+const Content = () => {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
     const [user, setUser] = useContext(UserContext);
@@ -134,8 +124,6 @@ function Content() {
     const handleDrawer = () => {
         setOpen(!open);
     };
-
-
 
     return (
         <div className={classes.root}>
@@ -164,13 +152,12 @@ function Content() {
                             }
                         </IconButton>
                         <Link style={{ textDecoration: 'none', cursor: 'pointer' }} to={'/'} >
-                            <img src={Logo} alt="Logo" />
+                            <img src={Logo} alt="Logo" style={{ width: '50px' }} />
                         </Link>
                     </div>
 
                     {user !== undefined ?
                         <div>
-
                             {user.role === 'admin' ?
                                 <Link style={{ textDecoration: 'none', 'color': '#235063', marginRight: '30px' }} to={'/admin'} className={classes.MenuBtns}>
                                     <VerifiedUserOutlinedIcon style={{ marginRight: '5px' }} />
@@ -253,7 +240,7 @@ function Content() {
                     </Switch>
                 </Suspense>
                 <footer className={classes.footer}>
-                    Design and Development by Darina Yordanova
+                    Created by Ivan Angelov
                 </footer>
             </main>
 

@@ -120,7 +120,7 @@ function LandingPage() {
                 <img id="head-section-image" src={G0} />
 
                 <Container id="head-section-content" component="main" >
-                    <Typography component="h2" className='header'>Study Hub Library</Typography>
+                    <Typography component="h2" className='header'>Library</Typography>
                     
                     { searchNow ? <Redirect to={{ pathname: "/books", searchWord: searchWord }} /> : null }
 
