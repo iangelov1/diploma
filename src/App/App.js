@@ -1,7 +1,7 @@
 
-import React, { Component, Suspense, useState, useContext, useEffect } from "react";
+import React from "react";
 
-import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import { UserProvider } from "./Context/userContext";
@@ -75,9 +75,7 @@ const theme = createMuiTheme({
     }
 });
 
-function App() {
-    
-
+const App = () => {
     return (
         <ThemeProvider theme={theme}>
             <Router>
@@ -86,7 +84,6 @@ function App() {
                         <Content />
                     </UserTypeProvider>
                 </UserProvider >
-
             </Router>
         </ThemeProvider>
     );

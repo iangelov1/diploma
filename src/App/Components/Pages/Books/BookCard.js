@@ -1,16 +1,13 @@
-
-import React, { useEffect, useState } from "react";
-import Grid from '@material-ui/core/Grid';
+import React from "react";
 import { Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { BrowserRouter as Router, Link, Route, Switch, Redirect, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
     card: {
         height: '100%',
         borderRadius: '20px',
-        '& img':
-        {
+        '& img': {
             borderRadius: '20px 20px 0 0',
             width: "100%",
             objectFit: 'cover',
@@ -38,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         position: 'relative',
-
         '&::before': {
             content: '""',
             display: 'block',
@@ -48,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
             position: 'absolute',
             right: '0'
         }
-
     },
     genre: {
         color: '#6C757D',
@@ -72,44 +67,36 @@ const useStyles = makeStyles((theme) => ({
         margin: 0,
         fontWeight: '500',
         color: 'black'
-
     }
-}));
-function BookCard({ book }) {
+});
+
+const BookCard = ({ book }) => {
     const classes = useStyles();
+
     return (
-
-
         <Paper elevation={3} className={classes.card}>
-            <Link style={{ textDecoration: 'none' }} to={{
-                pathname: book.id !== undefined ? `/books/${book.id}` : `/books/${book.objectID}`
-            }}>
-
+            <Link style={{ textDecoration: 'none' }} to={{ pathname: book.id !== undefined ? `/books/${book.id}` : `/books/${book.objectID}` }}>
                 {book?.cover?.length > 0 ?
                     <img src={book.cover} alt={book.title} className={classes.cover} />
                     : <img src="https://firebasestorage.googleapis.com/v0/b/library-management-syste-95445.appspot.com/o/images%2FNoImage.jpg?alt=media&token=31d32428-3e76-4226-ba13-78e294a86f0e" alt={book.title} className={classes.cover} />
                 }
             </Link>
+
             <div className={classes.textCont}>
                 <p className={classes.language}>{book.language}</p>
+
                 <div className={classes.genres}>
                     {book.genre.map(el =>
-                        (<Link style={{ textDecoration: 'none' }} to={{
-                            pathname: `/category/${el}`,
-                            state: { book: book }
-                        }}>
+                        (<Link style={{ textDecoration: 'none' }} to={{ pathname: `/category/${el}`, state: { book: book } }}>
                             <p className={classes.genre}>#{el}</p>
                         </Link>)
                     )}
                 </div>
-                <Link style={{ textDecoration: 'none' }} to={{
-                    pathname: book.id !== undefined ? `/books/${book.id}` : `/books/${book.objectID}`,
-                    state: { book: book }
-                }}>
+
+                <Link style={{ textDecoration: 'none' }} to={{ pathname: book.id !== undefined ? `/books/${book.id}` : `/books/${book.objectID}`, state: { book: book } }}>
                     <h3 className={classes.title}>{book.title}</h3>
                     <h5 className={classes.author}>{book.author}</h5>
                 </Link>
-
             </div>
         </Paper>
     );

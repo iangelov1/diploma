@@ -1,6 +1,5 @@
 
 import { lazy } from "react";
-import { Redirect } from "react-router-dom";
 const LandingPage = lazy(() => import("../Components/Pages/LandingPage/LandingPage"))
 const Books = lazy(() => import("../Components/Pages/Books/Books"))
 const LogIn = lazy(() => import("../Components/Pages/LogIn/LogIn"))
@@ -18,7 +17,6 @@ const EditBookItem = lazy(() => import("../Components/Pages/Books/BookItem/EditB
 
 export default [
     { path: "/", name: "Home", component: LandingPage },
-    // { path: "/", name: "Home", component: LandingPage },
     { path: "/books", name: "Books", component: Books },
     { path: "/login", name: "LogIn", component: LogIn },
     { path: "/signup", name: "SignUp", component: SignUp },
@@ -33,5 +31,4 @@ export default [
     { path: '/editbook/:id', name: 'BookItem', component: EditBookItem },
     { path: '/changePassword', name: 'ChangePassword', component: ChangePassword },
     { path: '/forgottenPassword', name: 'ForgottenPassword', component: ForgottenPassword },
-
-]
+];
