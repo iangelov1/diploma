@@ -15,7 +15,7 @@ const useStyles = makeStyles({
     }
 });
 
-const Books = () => {
+const Books = ({ searchWord }) => {
     const classes = useStyles();
 
     const [searchTerm, setSearchTerm] = React.useState("");
@@ -35,7 +35,7 @@ const Books = () => {
         const filteredPersons = searchResults.filter(
             person => {
                 return (
-                    person?.title?.includes(searchTerm.toLowerCase())
+                    person?.title?.includes(searchTerm)
                 );
             }
         );
@@ -44,8 +44,9 @@ const Books = () => {
     }, [searchTerm]);
 
     useEffect(() => {
-        console.log(searchTerm)
-        console.log(searchResults)
+        if(searchTerm === "") {
+            fetchMovies()
+        }
     }, [searchResults])
 
 
