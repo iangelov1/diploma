@@ -27,7 +27,7 @@ const useStyles = makeStyles({
         backgroundColor: '#FFF34E',
         borderRadius: '10px 10px 0px 0px',
         padding: '5px 5px 2px',
-        margin: '5px 0',
+        margin: '5px',
         fontWeight: 'bold'
     },
     genres: {
@@ -83,7 +83,12 @@ const BookCard = ({ book }) => {
             </Link>
 
             <div className={classes.textCont}>
-                <p className={classes.language}>{book.language}</p>
+                <div className={classes.language}>
+                    {book?.language?.map((item) => (
+                        <p style={{ display: 'inline-block', margin: '0', marginRight: '6px' }}>{item}</p>
+                    ))}
+                </div>
+                
 
                 <div className={classes.genres}>
                     {book.genre.map(el =>
