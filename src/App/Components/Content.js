@@ -4,13 +4,9 @@ import React, { Suspense, useState, useContext, useEffect } from "react";
 import { Link, Route, Switch } from 'react-router-dom';
 
 import routes from "../routes/routes";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import AppBar from "@material-ui/core/AppBar";
+import { CssBaseline, AppBar, Toolbar, Drawer, List, CircularProgress } from "@material-ui/core";
 import clsx from "clsx";
-import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
-import Drawer from "@material-ui/core/Drawer";
-import List from "@material-ui/core/List";
 import { makeStyles } from "@material-ui/core/styles";
 import MenuIcon from '@material-ui/icons/Menu';
 
@@ -21,7 +17,6 @@ import VerifiedUserOutlinedIcon from '@material-ui/icons/VerifiedUserOutlined';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import MenuList from './Navigation/MenuList';
 import Logo from '../../images/logo.jpg'
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 const drawerWidth = 240;
 
@@ -121,6 +116,7 @@ const Content = () => {
             setTest(true)
         }
     }, [user])
+
     const handleDrawer = () => {
         setOpen(!open);
     };
@@ -128,29 +124,13 @@ const Content = () => {
     return (
         <div className={classes.root}>
             <CssBaseline />
-            <AppBar
-                position="fixed"
-                className={clsx(classes.appBar, {
-                    [classes.appBarShift]: open,
-                })}>
+            <AppBar position="fixed" className={clsx(classes.appBar, { [classes.appBarShift]: open })}>
                 <Toolbar className={clsx(classes.toolbar)}>
                     <div className={clsx(classes.toolbarLeft)}>
-                        <IconButton
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={handleDrawer}
-                            edge="start"
-                            className={clsx(classes.menuButton)}
-                        >
-                            {
-                                open ?
-                                    <CloseIcon />
-
-                                    :
-                                    <MenuIcon />
-
-                            }
+                        <IconButton color="inherit" aria-label="open drawer" onClick={handleDrawer} edge="start" className={clsx(classes.menuButton)}>
+                            { open ? <CloseIcon /> : <MenuIcon /> }
                         </IconButton>
+
                         <Link style={{ textDecoration: 'none', cursor: 'pointer' }} to={'/'} >
                             <img src={Logo} alt="Logo" style={{ width: '50px' }} />
                         </Link>
@@ -158,12 +138,16 @@ const Content = () => {
 
                     {user !== undefined ?
                         <div>
-                            {user.role === 'admin' ?
-                                <Link style={{ textDecoration: 'none', 'color': '#235063', marginRight: '30px' }} to={'/admin'} className={classes.MenuBtns}>
-                                    <VerifiedUserOutlinedIcon style={{ marginRight: '5px' }} />
-                                    Admin
-                                </Link>
-                                : null}
+                            {
+                                user.role === 'admin' 
+                                    ?
+                                        <Link style={{ textDecoration: 'none', 'color': '#235063', marginRight: '30px' }} to={'/admin'} className={classes.MenuBtns}>
+                                            <VerifiedUserOutlinedIcon style={{ marginRight: '5px' }} />
+                                            Admin
+                                        </Link>
+                                    :   null
+                            }
+
                             <Link style={{ textDecoration: 'none', 'color': '#235063' }} to={'/profile'} className={classes.MenuBtns}>
                                 <AccountCircleOutlinedIcon style={{ marginRight: '5px' }} />
                                 {user.username}
@@ -171,44 +155,22 @@ const Content = () => {
                         </div>
                         :
                         <div>
-
-                            <Link style={{ textDecoration: 'none', 'color': 'white', 'backgroundColor': '#193F4C',
-                        'padding': '5px 10px', 'borderRadius': '3px' }} to={'/login'}>Вход</Link>
-                            <p style={{ display: 'inline' }}> or </p>
-                            <Link style={{ textDecoration: 'none', 'color': 'white' }} to={'/signup'}>Sign up</Link>
-
-
-
+                            <Link style={{ textDecoration: 'none', 'color': 'white', 'backgroundColor': '#193F4C', 'padding': '5px 10px', 'borderRadius': '3px' }} to={'/login'}>Вход</Link>
                         </div>
                     }
                 </Toolbar>
             </AppBar>
-            <Drawer
-                className={classes.drawer}
-                variant="persistent"
-                anchor="left"
-                open={open}
-                classes={{
-                    paper: classes.drawerPaper,
-                }}
-            >
 
+            <Drawer className={classes.drawer} variant="persistent" anchor="left" open={open} classes={{ paper: classes.drawerPaper }} >
                 <List>
                     {sideMenu.map(({ path, name, withAuth, component, index, innerMenu }) => (
-
                         <MenuList key={path} path={path} name={name} withAuth={withAuth} component={component} index={index} innerMenu={innerMenu} />
                     ))}
-
                 </List>
-
             </Drawer>
-            <main
-                className={clsx(classes.content, {
-                    [classes.contentShift]: open,
-                })}
-            >
-                <div className={classes.drawerHeader} />
 
+            <main className={clsx(classes.content, { [classes.contentShift]: open })}>
+                <div className={classes.drawerHeader} />
 
                 <Suspense fallback={
                     <CircularProgress style={{
@@ -222,30 +184,19 @@ const Content = () => {
                     <Switch>
                         <>
                             {routes.map(({ path, component, type }) => {
-
-
                                 return (
                                     <Route exact key={path} path={path} component={component} />
                                 )
-
-
                             })}
 
-                            {
-                                localStorage.length !== 0
-                                    ? <Route exact path="/" />
-                                    : null
-                            }
+                            { localStorage.length !== 0 ? <Route exact path="/" /> : null }
                         </>
                     </Switch>
                 </Suspense>
-                <footer className={classes.footer}>
-                    Created by Ivan Angelov
-                </footer>
+
+                <footer className={classes.footer}> Created by Ivan Angelov </footer>
             </main>
-
         </div>
-
     );
 }
 

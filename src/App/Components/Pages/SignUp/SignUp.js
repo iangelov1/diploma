@@ -11,7 +11,6 @@ import Container from '@material-ui/core/Container';
 
 import { auth, signInWithGoogle, generateUserDocument } from "../../Firebase/firebase";
 
-
 const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(8),
@@ -70,11 +69,10 @@ export default function LogIn() {
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
-            <div className={classes.paper}>
 
-                <Typography component="h1" variant="h5">
-                    Нов Потребител
-        </Typography>
+            <div className={classes.paper}>
+                <Typography component="h1" variant="h5"> Нов Потребител </Typography>
+
                 <form className={classes.form} noValidate >
                     <TextField
                         variant="outlined"
@@ -88,6 +86,7 @@ export default function LogIn() {
                         autoComplete="username"
                         onChange={(e) => setUsername(e.target.value)}
                     />
+
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -99,8 +98,8 @@ export default function LogIn() {
                         autoComplete="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-
                     />
+
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -113,6 +112,7 @@ export default function LogIn() {
                         value={passwordOne}
                         onChange={(e) => setPasswordOne(e.target.value)}
                     />
+
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -138,34 +138,15 @@ export default function LogIn() {
 
                     >
                         Регистрирай се
-          </Button>
-                    {/* <Typography component="p" variant="body1" align="center"  >
-                        or
-                    </Typography>
-                    <Button
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.google}
-                        onClick={() => {
-                            try {
-                                signInWithGoogle();
-                            } catch (error) {
-                                console.error("Error signing in with Google", error);
-                            }
-                        }}
+                    </Button>
 
-                    >
-                        Sign In with Google
-                        </Button> */}
                     {error && <p>{error.message}</p>}
+
                     <Grid container>
-                        <Grid item xs>
-                        </Grid>
+                        <Grid item xs> </Grid>
+                        
                         <Grid item>
-                            <Link to={'/login'} variant="body2">
-                                {"Имаш акаунт? Влез от тук!"}
-                            </Link>
+                            <Link to={'/login'} variant="body2"> {"Имаш акаунт? Влез от тук!"} </Link>
                         </Grid>
                     </Grid>
                 </form>

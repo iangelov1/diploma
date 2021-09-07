@@ -10,13 +10,11 @@ import { Collapse } from '@material-ui/core';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
     card: {
         borderRadius: '20px',
-        '& img':
-        {
+        '& img': {
             borderRadius: '20px 20px 0 0',
-
             width: "100%",
             objectFit: 'cover',
             height: '400px'
@@ -38,9 +36,8 @@ const useStyles = makeStyles((theme) => ({
     expCont: {
         display: 'inline-block',
         width: 'calc(100% - 25px)',
-
     }
-}));
+});
 
 const MenuList = ({ path, name, withAuth, component, index, innerMenu }) => {
     const classes = useStyles();
@@ -54,7 +51,6 @@ const MenuList = ({ path, name, withAuth, component, index, innerMenu }) => {
                         <ListItem button key={path} className={innerMenu ? classes.exp : null}>
 
                             <Link key={path} style={{ textDecoration: 'none', 'color': 'black' }} className={classes.expCont} to={path} >
-                                {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
                                 <ListItemText primary={name} />
                             </Link>
                             {expand
@@ -64,7 +60,6 @@ const MenuList = ({ path, name, withAuth, component, index, innerMenu }) => {
                     </div>)
                 : <Link key={path} style={{ textDecoration: 'none', 'color': 'black' }} to={path} >
                     <ListItem button key={path} className={innerMenu ? classes.exp : null}>
-                        {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
                         <ListItemText primary={name} />
                     </ListItem>
                 </Link>
@@ -80,7 +75,6 @@ const MenuList = ({ path, name, withAuth, component, index, innerMenu }) => {
                                 </ListItem>
                             </Link>
                         ))}
-
                     </List>
                 </Collapse>
                 : null

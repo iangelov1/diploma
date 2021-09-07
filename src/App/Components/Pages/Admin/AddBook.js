@@ -23,8 +23,7 @@ import XLSX from "xlsx";
 
 const useStyles = makeStyles((theme) => ({
     prev: {
-        '& img':
-        {
+        '& img': {
             width: "100%"
         }
     },

@@ -22,8 +22,9 @@ export const firestore = firebase.firestore();
 export const storage = firebase.storage();
 
 const provider = new firebase.auth.GoogleAuthProvider();
+
 export const signInWithGoogle = () => {
-  auth.signInWithPopup(provider);
+    auth.signInWithPopup(provider);
 };
 
 export const forgotPassword = (email) => {
